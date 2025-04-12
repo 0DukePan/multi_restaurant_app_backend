@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Counter from "./counter";
-import Recipe from "./recipe";
+//import Recipe from "./recipe";
 const MenuItemSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: String,
@@ -9,16 +9,17 @@ const MenuItemSchema = new mongoose.Schema({
       enum: ["appetizer", "main", "dessert", "beverage", "side"]
     },
     price: { type: Number, required: true },
-    flavorInfo: {
-      sweet: Boolean,
-      salty: Boolean,
-      spicy: Boolean
-    },
     dietaryInfo: {
       vegetarian: Boolean,
       vegan: Boolean,
       glutenFree: Boolean,
-      dairyFree: Boolean
+      lactoseFree: Boolean
+    },
+    HealthInfo:{
+      low_carb: Boolean,
+      low_fat: Boolean,
+      low_sugar: Boolean,
+      low_sodium: Boolean,
     },
     recipe: { type: mongoose.Schema.Types.ObjectId, ref: "Recipe" },
     matrixIndex: { type: Number, unique: true, sparse: true },
