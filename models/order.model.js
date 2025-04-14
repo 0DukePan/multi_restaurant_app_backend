@@ -1,63 +1,84 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose"
 
-const orderSchema = new mongoose.Schema({
-  user: {
+const orderItemSchema = new mongoose.Schema({
+  menuItem: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    ref: "MenuItem",
+    required: true,
   },
-  restaurant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
-    required: true
-  },
-  items: [{
-    name: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    price: { type: Number, required: true },
-    specialInstructions: String
-  }],
-  deliveryAddress: {
+  name: {
     type: String,
-    required: true
+    required: true,
   },
-  status: {
-    type: String,
-    enum: ['pending', 'processing', 'out_for_delivery', 'delivered', 'cancelled'],
-    default: 'pending'
-  },
-  orderType: {
-    type: String,
-    enum: ['delivery', 'pickup', 'dine_in'],
-    required: true
-  },
-  paymentMethod: {
-    type: String,
-    enum: ['credit_card', 'paypal', 'cash_on_delivery'],
-    required: true
-  },
-  totalAmount: {
+  price: {
     type: Number,
-    required: true
+    required: true,
   },
-  deliveryFee: {
+  quantity: {
     type: Number,
-    default: 0
-  },
-  tax: {
-    type: Number,
-    default: 0
-  },
-  rating: {
-    type: Number,
+    required: true,
     min: 1,
-    max: 5
   },
-  review: String,
-  estimatedDeliveryTime: Date,
-  actualDeliveryTime: Date
-}, {
-  timestamps: true
-});
+})
 
-export default mongoose.model('Order', orderSchema);
+const orderSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    restaurant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Restaurant",
+      required: true,
+    },
+    items: [orderItemSchema],
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    deliveryFee: {
+      type: Number,
+      default: 0,
+    },
+    tax: {
+      type: Number,
+      default: 0,
+    },
+    grandTotal: {
+      type: Number,
+      required: true,
+    },
+    paymentMethod: {
+      type: String,
+      enum: ["COD", "CARD"],
+      required: true,
+    },
+    orderType: {
+      type: String,
+      enum: ["DELIVERY", "TAKEAWAY"],
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["PLACED", "CONFIRMED", "PREPARING", "READY", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED"],
+      default: "PLACED",
+    },
+    deliveryAddress: {
+      address: String,
+      latitude: Number,
+      longitude: Number,
+      addressType: String,
+    },
+    estimatedDeliveryTime: {
+      type: Date,
+    },
+  },
+  {
+    timestamps: true,
+  },
+)
+
+const Order = mongoose.model("Order", orderSchema)
+export default Order
